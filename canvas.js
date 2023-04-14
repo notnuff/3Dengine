@@ -49,17 +49,15 @@ const degToRad = (theta) => {
 };
 function matMultiply (vec, m) {
     const resVector = new Point3D();
-    const keys = ["x", "y", "z"]
-    for (let i = 0; i < 3; i++) {
-        const key = keys[i];
+    const keys = ["x", "y", "z"];
+    let i = 0;
+    for (let key of keys) {
         resVector[key] = vec.x * m[0][i] + vec.y * m[1][i] + vec.z * m[2][i] + m[3][i];
+        i++;
     }
-    // resVector.x = vec.x * m[0][0] + vec.y * m[1][0] + vec.z * m[2][0] + m[3][0];
-    // resVector.y = vec.x * m[0][1] + vec.y * m[1][1] + vec.z * m[2][1] + m[3][1];
-    // resVector.z = vec.x * m[0][2] + vec.y * m[1][2] + vec.z * m[2][2] + m[3][2];
     const w = vec.x * m[0][3] + vec.y * m[1][3] + vec.z * m[2][3] + m[3][3];
     if (w) {
-        resVector.x /= w; resVector.y /= w; resVector.z /= w;
+        for (let key of keys) resVector[key] /= w;
     }
     return resVector;
 }
@@ -174,24 +172,3 @@ function animate() {
     }
 }
 animate();
-/*
-const testVector = new Point3D(0, 1, 2);
-const testMatrix = [
-    [0, 1, 2, 3],
-    [10, 11, 12, 13],
-    [20, 21, 22, 23],
-    [30, 31, 32, 33]
-];
-const mMultRes = matMultiply(testVector, testMatrix);
-console.log(mMultRes);
-*/
-
-/*
-const testTriangle = new Triangle([
-    [WIDTH / 3, HEIGHT / 3, 1],
-    [2 * WIDTH / 3, HEIGHT / 3, 1],
-    [WIDTH / 3, 2 * HEIGHT / 3, 1]
-])
-
-drawTriangle(testTriangle);
-*/
