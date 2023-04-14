@@ -11,16 +11,15 @@ c.fillStyle = "#303030";
 c.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
 //3D structures
-const point3D = {
-    x: 0,
-    y: 0,
-    z: 0
-};
 
 function Point3D (x, y, z) {
     this.x = x;
     this.y = y;
     this.z = z;
+    this.toString = function () {
+        return `(${this.x}, ${this.y}, ${this.z})`
+    };
+
 }
 function Triangle (pointsArray) {
     if (pointsArray) this.points = pointsArray.map(([x, y, z]) => new Point3D(x, y, z));
@@ -29,7 +28,12 @@ function Triangle (pointsArray) {
         new Point3D(undefined, undefined,undefined),
         new Point3D(undefined, undefined,undefined),
     ];
+
+    /*else this.points = new Array.from({length: 3},
+        () => new Point3D(undefined, undefined, undefined));*/
 }
+
+
 function Mesh (triangles) {
     this.triangles = triangles.map((pointsArray) => new Triangle(pointsArray));
 
@@ -40,14 +44,20 @@ function Scene (...meshes) {
 }
 
 //required functions
-function vecXmatMultiply (vec, m) {
+const degToRad = (theta) => {
+    return theta * Math.PI / 180;
+};
+function matMultiply (vec, m) {
     const resVector = new Point3D();
-    resVector.x = vec.x * m[0][0] + vec.y * m[1][0] + vec.z * m[2][0] + m[3][0];
-    resVector.y = vec.x * m[0][1] + vec.y * m[1][1] + vec.z * m[2][1] + m[3][1];
-    resVector.z = vec.x * m[0][2] + vec.y * m[1][2] + vec.z * m[2][2] + m[3][2];
+    const keys = ["x", "y", "z"];
+    let i = 0;
+    for (let key of keys) {
+        resVector[key] = vec.x * m[0][i] + vec.y * m[1][i] + vec.z * m[2][i] + m[3][i];
+        i++;
+    }
     const w = vec.x * m[0][3] + vec.y * m[1][3] + vec.z * m[2][3] + m[3][3];
-    if (w){
-        resVector.x /= w; resVector.y /= w; resVector.z /= w;
+    if (w) {
+        for (let key of keys) resVector[key] /= w;
     }
     return resVector;
 }
@@ -64,41 +74,43 @@ function drawTriangle(triangle) {
 }
 
 //Projection matrix
-const fNear = 0.1;
-const fFar = 1000;
-const fFov = 90;
-const fQ = fFar / (fFar - fNear);
+const screenZNear = 0.1;
+const screenZFar = 1000;
+const fov = 90;
+const fovRad = 1 / Math.tan(degToRad(fov * 0.5));
 const fAspectRatio = HEIGHT / WIDTH;
-const fFovRad = 1 / Math.tan(fFov * 0.5 * Math.PI / 180);
-let fTheta = 0;
+const screenZNorm = screenZFar / (screenZFar - screenZNear);
+const toCameraDist = 2;
+let angle = 0;
 
-const projectionMatrix = [
-    [fAspectRatio * fFovRad, 0, 0, 0],
-    [0, fFovRad, 0, 0],
-    [0, 0,  fQ, 1],
-    [0, 0, -fNear * fQ, 0]
+const matProject = [
+    [fAspectRatio * fovRad, 0, 0, 0],
+    [0, fovRad, 0, 0],
+    [0, 0,  screenZNorm, 1],
+    [0, 0, -screenZNear * screenZNorm, 0]
 ];
 
-const rotationMatrixByX = (fTheta) => ([
+const matRotateX = (angle) => ([
     [1, 0, 0, 0],
-    [0, Math.cos(fTheta), -Math.sin(fTheta), 0],
-    [0, Math.sin(fTheta), Math.cos(fTheta), 0],
+    [0, Math.cos(angle), -Math.sin(angle), 0],
+    [0, Math.sin(angle), Math.cos(angle), 0],
     [0, 0, 0, 1]
 ]);
 
-const rotationMatrixByY = (fTheta) => ([
-    [Math.cos(fTheta), 0, Math.sin(fTheta), 0],
+const matRotateY = (angle) => ([
+    [Math.cos(angle), 0, Math.sin(angle), 0],
     [0, 1, 0, 0],
-    [-Math.sin(fTheta), 0, Math.cos(fTheta), 0],
+    [-Math.sin(angle), 0, Math.cos(angle), 0],
     [0, 0, 0, 1]
 ]);
 
-const rotationMatrixByZ = (fTheta) => ([
-    [Math.cos(fTheta), -Math.sin(fTheta), 0, 0],
-    [Math.sin(fTheta), Math.cos(fTheta), 0, 0],
+const matRotateZ = (angle) => ([
+    [Math.cos(angle), -Math.sin(angle), 0, 0],
+    [Math.sin(angle), Math.cos(angle), 0, 0],
     [0, 0, 1, 0],
     [0, 0, 0, 1]
 ]);
+
 
 //test mesh
 const cube = new Mesh([
@@ -129,56 +141,34 @@ const cube = new Mesh([
 
 
 function animate() {
+    requestAnimationFrame(animate);
+
     c.fillStyle = "#303030";
     c.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
-    requestAnimationFrame(animate);
-    fTheta += 0.01;
+    angle += degToRad(1);
+
+    let triProjected = new Triangle();
+    let triRotated = new Triangle();
+    let triTranslated = new Triangle();
+
     for (let tri of cube.triangles) {
-        let triProjected = new Triangle();
-        let triRotated = new Triangle();
-        let triTranslated = new Triangle();
         for (let i = 0; i < 3; i++) {
-            triRotated.points[i] = vecXmatMultiply(tri.points[i], rotationMatrixByY(fTheta));
+            triRotated.points[i] = matMultiply(tri.points[i], matRotateY(angle));
         }
         triTranslated = triRotated;
         for (let i = 0; i < 3; i++) {
-            triTranslated.points[i].z = triRotated.points[i].z + 3;
+            triTranslated.points[i].z = triRotated.points[i].z + toCameraDist;
         }
 
         for (let i = 0; i < 3; i++){
-            triProjected.points[i] = vecXmatMultiply(triTranslated.points[i], projectionMatrix);
+            triProjected.points[i] = matMultiply(triTranslated.points[i], matProject);
             triProjected.points[i].x += 1;
             triProjected.points[i].y += 1;
             triProjected.points[i].x = Math.floor(triProjected.points[i].x * 0.5 * WIDTH);
             triProjected.points[i].y = Math.floor(triProjected.points[i].y * 0.5 * HEIGHT);
         }
         drawTriangle(triProjected);
-        console.log(tri);
-        console.log(triRotated);
-        console.log(triProjected);
     }
 }
-
 animate();
-/*
-const testVector = new Point3D(0, 1, 2);
-const testMatrix = [
-    [0, 1, 2, 3],
-    [10, 11, 12, 13],
-    [20, 21, 22, 23],
-    [30, 31, 32, 33]
-];
-const mMultRes = vecXmatMultiply(testVector, testMatrix);
-console.log(mMultRes);
-*/
-
-/*
-const testTriangle = new Triangle([
-    [WIDTH / 3, HEIGHT / 3, 1],
-    [2 * WIDTH / 3, HEIGHT / 3, 1],
-    [WIDTH / 3, 2 * HEIGHT / 3, 1]
-])
-
-drawTriangle(testTriangle);
-*/
