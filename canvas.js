@@ -147,52 +147,6 @@ const cube = new Mesh([
     // bottom
     [[1, 0, 1], [0, 0, 1], [0, 0, 0]],
     [[1, 0, 1], [0, 0, 0], [1, 0, 0]],
-    [
-        [Math.random(), Math.random(), Math.random()],
-        [Math.random(), Math.random(), Math.random()],
-        [Math.random(), Math.random(), Math.random()]
-    ],
-    [
-        [Math.random(), Math.random(), Math.random()],
-        [Math.random(), Math.random(), Math.random()],
-        [Math.random(), Math.random(), Math.random()]
-    ],
-    [
-        [Math.random(), Math.random(), Math.random()],
-        [Math.random(), Math.random(), Math.random()],
-        [Math.random(), Math.random(), Math.random()]
-    ],
-    [
-        [Math.random(), Math.random(), Math.random()],
-        [Math.random(), Math.random(), Math.random()],
-        [Math.random(), Math.random(), Math.random()]
-    ],
-    [
-        [Math.random(), Math.random(), Math.random()],
-        [Math.random(), Math.random(), Math.random()],
-        [Math.random(), Math.random(), Math.random()]
-    ],
-    [
-        [Math.random(), Math.random(), Math.random()],
-        [Math.random(), Math.random(), Math.random()],
-        [Math.random(), Math.random(), Math.random()]
-    ],
-    [
-        [Math.random(), Math.random(), Math.random()],
-        [Math.random(), Math.random(), Math.random()],
-        [Math.random(), Math.random(), Math.random()]
-    ],
-    [
-        [Math.random(), Math.random(), Math.random()],
-        [Math.random(), Math.random(), Math.random()],
-        [Math.random(), Math.random(), Math.random()]
-    ],
-    [
-        [Math.random(), Math.random(), Math.random()],
-        [Math.random(), Math.random(), Math.random()],
-        [Math.random(), Math.random(), Math.random()]
-    ],
-
 ]);
 
 
