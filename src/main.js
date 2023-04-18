@@ -5,34 +5,9 @@ import {degToRad, matMultiply} from "./MathStuff/MathFunctions.js";
 import {toCameraDist} from "./MathStuff/Constants.js"
 import {WIDTH, HEIGHT} from "./UserStuff/CanvasProperties.js";
 import {clearCanvas, drawTriangle} from "./DrawStuff/DrawFunctions.js";
+import {cube} from "./UserStuff/CubeExample.js";
 
 'use strict'
-//test mesh
-const cube = new Mesh([
-    // south
-    [[0, 0, 0], [0, 1, 0], [1, 1, 0]],
-    [[0, 0, 0], [1, 1, 0], [1, 0, 0]],
-
-    // east
-    [[1, 0, 0], [1, 1, 0], [1, 1, 1]],
-    [[1, 0, 0], [1, 1, 1], [1, 0, 1]],
-
-    // north
-    [[1, 0, 1], [1, 1, 1], [0, 1, 1]],
-    [[1, 0, 1], [0, 1, 1], [0, 0, 1]],
-
-    // west
-    [[0, 0, 1], [0, 1, 1], [0, 1, 0]],
-    [[0, 0, 1], [0, 1, 0], [0, 0, 0]],
-
-    // top
-    [[0, 1, 0], [0, 1, 1], [1, 1, 1]],
-    [[0, 1, 0], [1, 1, 1], [1, 1, 0]],
-
-    // bottom
-    [[1, 0, 1], [0, 0, 1], [0, 0, 0]],
-    [[1, 0, 1], [0, 0, 0], [1, 0, 0]],
-]);
 let angle = 0;
 
 clearCanvas();
