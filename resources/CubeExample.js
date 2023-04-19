@@ -1,4 +1,4 @@
-import {Mesh} from "../Structures/Mesh.js";
+import {Mesh} from "../src/Structures/Mesh.js";
 
 const cube = new Mesh([
     // south

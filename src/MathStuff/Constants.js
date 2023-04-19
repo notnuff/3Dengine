@@ -1,4 +1,4 @@
-import {WIDTH, HEIGHT} from "../UserStuff/CanvasProperties.js";
+import {WIDTH, HEIGHT} from "../CanvasProperties.js";
 import {degToRad} from "./MathFunctions.js";
 const screenZNear = 0.1;
 const screenZFar = 1000;

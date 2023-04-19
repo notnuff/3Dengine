@@ -12,6 +12,22 @@ function matMultiply (vec, m) {
     }
     return {x, y, z};
 }
-
-
-export {degToRad, matMultiply}
+const vecDist = vec => Math.sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+const vecDotMultiply = (vec1, vec2) => {
+    return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
+}
+const vecProductNorm = (vec1, vec2) => {
+    let x = vec1.y * vec2.z - vec1.z * vec2.y;
+    let y = vec1.z * vec2.x - vec1.x * vec2.z;
+    let z = vec1.x * vec2.y - vec1.y * vec2.x;
+    const dis = vecDist({x, y, z});
+    x /=  dis; y /= dis; z /= dis;
+    return {x, y, z};
+}
+function cosBetweenVectors (vec1, vec2) {
+    const vec1dist = vecDist(vec1);
+    const vec2dist = vecDist(vec2);
+    const cos = vecDotMultiply(vec1, vec2) / vec1dist / vec2dist;
+    return cos;
+}
+export {degToRad, matMultiply, cosBetweenVectors, vecProductNorm}
