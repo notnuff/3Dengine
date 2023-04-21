@@ -14,7 +14,7 @@ function drawTriangle(triangle, color) {
 }
 
 function fillTriangle(triangle, cos) {
-        const color = -cos * 255 * 0.7 + 70;
+        const color = -cos * 255 * 0.5 + 100;
         drawTriangle(triangle, color);
         c.beginPath();
         c.moveTo(triangle.p1.x, triangle.p1.y);

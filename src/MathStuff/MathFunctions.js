@@ -30,4 +30,4 @@ function cosBetweenVectors (vec1, vec2) {
     const cos = vecDotMultiply(vec1, vec2) / vec1dist / vec2dist;
     return cos;
 }
-export {degToRad, matMultiply, cosBetweenVectors, vecProductNorm}
+export {degToRad, matMultiply, cosBetweenVectors, vecProductNorm, vecDist}
