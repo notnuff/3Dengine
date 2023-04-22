@@ -1,16 +1,9 @@
 'use strict'
 
-import {Mesh} from "./Structures/Mesh.js";
-import {Triangle} from "./Structures/Triangle.js";
-import {matRotateX, matRotateY, matRotateZ, matProject} from "./MathStuff/Matrices.js";
-import {degToRad, matMultiply, vecDist, vecProductNorm} from "./MathStuff/MathFunctions.js";
-import {toCameraDist} from "./MathStuff/Constants.js"
-import {WIDTH, HEIGHT, c} from "./CanvasProperties.js";
-import {clearCanvas, drawTriangle, fillTriangle} from "./DrawStuff/DrawFunctions.js";
-import {cube} from "../resources/CubeExample.js";
-import {cosBetweenVectors} from "./MathStuff/MathFunctions.js";
-import {Point3D} from "./Structures/Point3D.js";
-
+import { Triangle, Point3D, clearCanvas, vecDist, degToRad,
+    vecProductNorm, cosBetweenVectors, fillTriangle,
+    matMultiply, matProject, matRotateX, matRotateY, matRotateZ,
+    HEIGHT, WIDTH, cube, toCameraDist } from './modules.js';
 let angle = 0;
 
 clearCanvas();
@@ -55,7 +48,7 @@ function animate() {
         normal = vecProductNorm(v1, v2);
         cos = cosBetweenVectors(toCamVector, normal);
         if (cos < 0) {
-            const ilumination = cosBetweenVectors(lightDirect, normal);
+            const illumination = cosBetweenVectors(lightDirect, normal);
             for (let point of points) {
                 triProjected[point] = matMultiply(triTranslated[point], matProject);
                 triProjected[point].x += 1;
@@ -63,7 +56,7 @@ function animate() {
                 triProjected[point].x = Math.floor(triProjected[point].x * 0.5 * WIDTH);
                 triProjected[point].y = Math.floor(triProjected[point].y * 0.5 * HEIGHT);
             }
-            fillTriangle(triProjected, ilumination);
+            fillTriangle(triProjected, illumination);
         }
     }
     requestAnimationFrame(animate);
