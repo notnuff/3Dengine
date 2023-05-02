@@ -1,7 +1,7 @@
-import {Mesh} from "./Mesh.js";
+import { Mesh } from './Mesh.js';
 
-function Scene (...meshes) {
+function Scene(...meshes) {
     meshes.forEach(mesh => this[mesh] = mesh);
 }
 
-export {Scene};
+export { Scene };

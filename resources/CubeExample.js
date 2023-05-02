@@ -1,4 +1,4 @@
-import {Mesh} from "../src/Structures/Mesh.js";
+import { Mesh } from '../src/Structures/Mesh.js';
 
 const cube = new Mesh([
     // south
@@ -24,6 +24,14 @@ const cube = new Mesh([
     // bottom
     [[1, 0, 1], [0, 0, 1], [0, 0, 0]],
     [[1, 0, 1], [0, 0, 0], [1, 0, 0]],
-]);
+]
+);
+/*for (let i = 0; i <= 1000; i++) {
+    cube.push([
+        [Math.random(), Math.random(), Math.random()],
+        [Math.random(), Math.random(), Math.random()],
+        [Math.random(), Math.random(), Math.random()],
+    ]);
+}*/
 
-export {cube}
+export { cube };
