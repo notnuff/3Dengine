@@ -1,46 +1,74 @@
-'use strict'
+'use strict';
 
-import { Triangle, Point3D, clearCanvas, vecDist, degToRad,
+import {
+    Triangle, Point3D, clearCanvas, vecDist, degToRad,
     vecProductNorm, cosBetweenVectors, fillTriangle,
     matMultiply, matProject, matRotateX, matRotateY, matRotateZ,
-    HEIGHT, WIDTH, cube, toCameraDist } from './modules.js';
+    HEIGHT, WIDTH, cube, toCameraDist
+} from './modules.js';
+
 let angle = 0;
 
 clearCanvas();
 
-let triProjected = new Triangle();
-let triRotated = new Triangle();
+const triProjected = new Triangle();
+const triRotated = new Triangle();
 let triTranslated = new Triangle();
 
-let toCamVector = new Point3D();
+const toCamVector = new Point3D();
 let normal = new Point3D();
-let v1 = new Point3D(), v2 = new Point3D();
-const points = ["p1", "p2", "p3"];
-const coords = ["x", "y", "z"];
+const v1 = new Point3D(), v2 = new Point3D();
+const points = ['p1', 'p2', 'p3'];
+const coords = ['x', 'y', 'z'];
 let cos;
-let lightDirect = new Point3D(1, 1, 1);
-const l = vecDist(lightDirect);
-lightDirect.x /= l; lightDirect.y /= l; lightDirect.z /=l;
+const lightDirect = new Point3D(1, 1, 1);
 
-const loadOBJ = (input) => {
-    console.log(input);
+const l = vecDist(lightDirect);
+lightDirect.x /= l;
+lightDirect.y /= l;
+lightDirect.z /= l;
+
+const fileInput = document.getElementById('input');
+
+function handleObj(event) {
+    const strType = {
+        o: (str) => console.log(str),
+    };
+    let obj = event.target.result;
+    obj = obj.split('\n');
+    for (const str of obj) {
+        const typeLetter = str[0];
+        if (strType[typeLetter]) {
+            strType[typeLetter](str);
+        }
+    }
 }
+function handleFile() {
+    const file = fileInput.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.addEventListener('load', handleObj);
+        reader.readAsText(file);
+    }
+}
+
+fileInput.onchange = handleFile;
 
 function animate() {
     clearCanvas();
-    angle = (angle + degToRad(1)) % degToRad(360)
-    for (let tri of cube.triangles) {
-            for (let point of points) {
-                triRotated[point] = matMultiply(tri[point], matRotateY(angle));
-                triRotated[point] = matMultiply(triRotated[point], matRotateX(angle));
+    angle = (angle + degToRad(1)) % degToRad(360);
+    for (const tri of cube.triangles) {
+        for (const point of points) {
+            triRotated[point] = matMultiply(tri[point], matRotateY(angle));
+            triRotated[point] = matMultiply(triRotated[point], matRotateX(angle));
 
-            }
-            triTranslated = triRotated;
-            for (let point of points) {
-                triTranslated[point].z = triRotated[point].z + toCameraDist;
-            }
+        }
+        triTranslated = triRotated;
+        for (const point of points) {
+            triTranslated[point].z = triRotated[point].z + toCameraDist;
+        }
 
-        for (let coord of coords) {
+        for (const coord of coords) {
             toCamVector[coord] = triTranslated.p1[coord];
             v1[coord] = triTranslated.p2[coord] - triTranslated.p1[coord];
             v2[coord] = triTranslated.p3[coord] - triTranslated.p2[coord];
@@ -49,7 +77,7 @@ function animate() {
         cos = cosBetweenVectors(toCamVector, normal);
         if (cos < 0) {
             const illumination = cosBetweenVectors(lightDirect, normal);
-            for (let point of points) {
+            for (const point of points) {
                 triProjected[point] = matMultiply(triTranslated[point], matProject);
                 triProjected[point].x += 1;
                 triProjected[point].y += 1;
@@ -61,4 +89,5 @@ function animate() {
     }
     requestAnimationFrame(animate);
 }
+
 animate();

@@ -1,4 +1,4 @@
-import {aspectRatio, fovRad, screenZNorm, screenZNear} from "./Constants.js";
+import { aspectRatio, fovRad, screenZNorm, screenZNear } from './Constants.js';
 
 const matRotateX = (angle) => ([
     [1, 0, 0, 0],
@@ -24,8 +24,8 @@ const matRotateZ = (angle) => ([
 const matProject = [
     [aspectRatio * fovRad, 0, 0, 0],
     [0, fovRad, 0, 0],
-    [0, 0,  screenZNorm, 1],
+    [0, 0, screenZNorm, 1],
     [0, 0, -screenZNear * screenZNorm, 0]
 ];
 
-export {matRotateX, matRotateY, matRotateZ, matProject}
+export { matRotateX, matRotateY, matRotateZ, matProject };

@@ -5,4 +5,4 @@ canvas.width = WIDTH;
 canvas.height = HEIGHT;
 const c = canvas.getContext('2d');
 
-export {canvas, WIDTH, HEIGHT, c}
+export { canvas, WIDTH, HEIGHT, c };

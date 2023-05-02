@@ -1,5 +1,6 @@
-import {WIDTH, HEIGHT} from "../CanvasProperties.js";
-import {degToRad} from "./MathFunctions.js";
+import { WIDTH, HEIGHT } from '../CanvasProperties.js';
+import { degToRad } from './MathFunctions.js';
+
 const screenZNear = 0.1;
 const screenZFar = 1000;
 const fov = 90;
@@ -8,4 +9,11 @@ const aspectRatio = HEIGHT / WIDTH;
 const screenZNorm = screenZFar / (screenZFar - screenZNear);
 const toCameraDist = 2;
 
-export {screenZNear, screenZFar, fovRad, aspectRatio, screenZNorm, toCameraDist}
+export {
+    screenZNear,
+    screenZFar,
+    fovRad,
+    aspectRatio,
+    screenZNorm,
+    toCameraDist
+};
