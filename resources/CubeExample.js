@@ -1,6 +1,7 @@
 import { Mesh } from '../src/Structures/Mesh.js';
 
-const cube = new Mesh([
+
+let cube = new Mesh([
     // south
     [[0, 0, 0], [0, 1, 0], [1, 1, 0]],
     [[0, 0, 0], [1, 1, 0], [1, 0, 0]],
@@ -33,5 +34,4 @@ const cube = new Mesh([
         [Math.random(), Math.random(), Math.random()],
     ]);
 }*/
-
 export { cube };
