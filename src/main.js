@@ -4,7 +4,7 @@ import {
     Triangle, Point3D, clearCanvas, vecDist, degToRad,
     vecProductNorm, cosBetweenVectors, fillTriangle,
     matMultiply, matProject, matRotateX, matRotateY, matRotateZ,
-    HEIGHT, WIDTH, cube, toCameraDist, Mesh
+    HEIGHT, WIDTH, cube, toCameraDist, Mesh, Scene
 } from './modules.js';
 
 let angle = 0;
@@ -28,41 +28,7 @@ lightDirect.x /= l;
 lightDirect.y /= l;
 lightDirect.z /= l;
 
-const Scene = {};
 
-const fileInput = document.getElementById('input');
-
-function handleObj(event) {
-    const verticesPull = [];
-    const trianglePull = [];
-    const strType = {
-        o: (str) => this.name = str.split(' ')[1],
-        v: (str) => verticesPull.push([str.split(' ')[1], str.split(' ')[2], str.split(' ')[3]]),
-        f: (str) => {
-            const vertNum = [str.split(' ')[1] - 1, str.split(' ')[2] - 1, str.split(' ')[3] - 1];
-            trianglePull.push([verticesPull[vertNum[0]], verticesPull[vertNum[1]], verticesPull[vertNum[2]]]);
-        },
-    };
-    let obj = event.target.result;
-    obj = obj.split('\n');
-    for (const str of obj) {
-        const typeLetter = str[0];
-        if (strType[typeLetter]) strType[typeLetter](str);
-    }
-    Scene[this.name] = new Mesh(trianglePull);
-}
-
-
-function handleFile() {
-    const file = fileInput.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.addEventListener('load', handleObj);
-        reader.readAsText(file);
-    }
-}
-
-fileInput.onchange = handleFile;
 let frame = 0;
 function animate() {
     clearCanvas();

@@ -8,3 +8,4 @@ export {clearCanvas, drawTriangle, fillTriangle} from "./DrawStuff/DrawFunctions
 export {cube} from "../resources/CubeExample.js";
 export {cosBetweenVectors} from "./MathStuff/MathFunctions.js";
 export {Point3D} from "./Structures/Point3D.js";
+export {Scene} from './Structures/Scene.js'

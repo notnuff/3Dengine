@@ -7,7 +7,7 @@ const fov = 90;
 const fovRad = 1 / Math.tan(degToRad(fov * 0.5));
 const aspectRatio = HEIGHT / WIDTH;
 const screenZNorm = screenZFar / (screenZFar - screenZNear);
-const toCameraDist = 2;
+const toCameraDist = 5;
 
 export {
     screenZNear,
