@@ -1,4 +1,4 @@
-import { c } from '../CanvasProperties.js';
+import { c } from '../MathStuff/Constants.js';
 
 const points = ['p1', 'p2', 'p3'];
 
@@ -15,7 +15,7 @@ function drawTriangle(triangle, color) {
 
 function fillTriangle(triangle, cos) {
     const color = -cos * 255 * 0.5 + 100;
-    drawTriangle(triangle, 0);
+    //drawTriangle(triangle, 0);
     c.beginPath();
     c.moveTo(triangle.p1.x, triangle.p1.y);
     c.lineTo(triangle.p2.x, triangle.p2.y);

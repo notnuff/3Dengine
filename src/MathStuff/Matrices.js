@@ -1,4 +1,11 @@
-import { aspectRatio, fovRad, screenZNorm, screenZNear } from './Constants.js';
+import {aspectRatio, fovRad, screenZNorm, screenZNear, WIDTH, canvas, HEIGHT} from './Constants.js';
+
+const matDiagonal = () => ([
+    [1, 0, 0, 0],
+    [0, 1, 0, 0],
+    [0, 0, 1, 0],
+    [0, 0, 0, 1]
+]);
 
 const matRotateX = (angle) => ([
     [1, 0, 0, 0],
@@ -21,11 +28,25 @@ const matRotateZ = (angle) => ([
     [0, 0, 0, 1]
 ]);
 
-const matProject = [
+const matTranslate = (x, y, z) => ([
+    [1, 0, 0, 0],
+    [0, 1, 0, 0],
+    [0, 0, 1, 0],
+    [x, y, z, 1],
+]);
+let matProject = [
     [aspectRatio * fovRad, 0, 0, 0],
     [0, fovRad, 0, 0],
     [0, 0, screenZNorm, 1],
     [0, 0, -screenZNear * screenZNorm, 0]
 ];
-
-export { matRotateX, matRotateY, matRotateZ, matProject };
+window.addEventListener('resize',
+    function(){
+        matProject = [
+            [aspectRatio * fovRad, 0, 0, 0],
+            [0, fovRad, 0, 0],
+            [0, 0, screenZNorm, 1],
+            [0, 0, -screenZNear * screenZNorm, 0]
+        ];
+})
+export { matRotateX, matRotateY, matRotateZ, matProject, matTranslate, matDiagonal };
