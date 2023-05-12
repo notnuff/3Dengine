@@ -2,9 +2,9 @@
 
 import {
     Triangle, Point3D, clearCanvas, vecDist, degToRad,
-    vecProductNorm, cosBetweenVectors, fillTriangle,
+    vecProductNorm, vCosBetween, fillTriangle,
     matMultiply, matProject, matRotateX, matRotateY, matRotateZ,
-    HEIGHT, WIDTH, cube, toCameraDist, Mesh, Scene
+    HEIGHT, WIDTH, cube, toCameraDist, Mesh, Scene, Vec
 } from './modules.js';
 
 let angle = 0;
@@ -15,18 +15,12 @@ const triProjected = new Triangle();
 const triRotated = new Triangle();
 let triTranslated = new Triangle();
 
-const toCamVector = new Point3D();
-let normal = new Point3D();
-const v1 = new Point3D(), v2 = new Point3D();
+const toCamVector = new Vec();
+const v1 = new Vec(), v2 = new Vec();
 const points = ['p1', 'p2', 'p3'];
 const coords = ['x', 'y', 'z'];
-let cos;
-const lightDirect = new Point3D(1, 1, 1);
-
-const l = vecDist(lightDirect);
-lightDirect.x /= l;
-lightDirect.y /= l;
-lightDirect.z /= l;
+const lightDirect = new Vec(1, 1, 1);
+lightDirect.normalize();
 
 
 let frame = 0;
@@ -51,10 +45,11 @@ function animate() {
                 v1[coord] = triTranslated.p2[coord] - triTranslated.p1[coord];
                 v2[coord] = triTranslated.p3[coord] - triTranslated.p2[coord];
             }
-            normal = vecProductNorm(v1, v2);
-            cos = cosBetweenVectors(toCamVector, normal);
+
+            const normal = triTranslated.normal();
+            const cos = vCosBetween(toCamVector, normal);
             if (cos < 0) {
-                const illumination = cosBetweenVectors(lightDirect, normal);
+                const illumination = vCosBetween(lightDirect, normal);
                 for (const point of points) {
                     triProjected[point] = matMultiply(triTranslated[point], matProject);
                     triProjected[point].x += 1;

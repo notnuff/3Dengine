@@ -17,7 +17,7 @@ function matMultiply(vec, m) {
 }
 
 const vecDist = vec => Math.sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
-const vecDotMultiply = (vec1, vec2) => {
+const vCrossProd = (vec1, vec2) => {
     return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
 };
 const vecProductNorm = (vec1, vec2) => {
@@ -31,11 +31,11 @@ const vecProductNorm = (vec1, vec2) => {
     return { x, y, z };
 };
 
-function cosBetweenVectors(vec1, vec2) {
+function vCosBetween(vec1, vec2) {
     const vec1dist = vecDist(vec1);
     const vec2dist = vecDist(vec2);
-    const cos = vecDotMultiply(vec1, vec2) / vec1dist / vec2dist;
+    const cos = vCrossProd(vec1, vec2) / vec1dist / vec2dist;
     return cos;
 }
 
-export { degToRad, matMultiply, cosBetweenVectors, vecProductNorm, vecDist };
+export { degToRad, matMultiply, vCosBetween, vecProductNorm, vecDist };

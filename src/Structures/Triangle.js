@@ -10,4 +10,7 @@ Triangle.from = function(pArray) {
     return new Triangle(...pArray);
 };
 
+Triangle.prototype.normal = function () {
+    const v1 = this.
+}
 export { Triangle };
