@@ -3,29 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>3D engine</title>
-    <style>
-        canvas {
-            position: fixed;
-        }
-        body {
-            margin: 0;
-        }
-        h1 {
-            position: absolute;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: auto;
-            left: 0;
-            right: 0;
-            top: 0;
-            color: lightgray;
-            text-align: center;
-            font-family: system-ui;
-        }
-    </style>
+    <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
-<canvas id = "userCanvas"></canvas>
-<script src = "canvas.js" ></script>
+    <canvas id = "userCanvas"></canvas>
+    <input type="file" id="input">
+
+    <script type="module" src = "src/main.js" ></script>
+    <script type="module" src = "src/modules.js" ></script>
+
 </body>
 </html>
