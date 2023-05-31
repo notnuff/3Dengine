@@ -11,6 +11,7 @@ Vec.from = function(pArray) {
     }
     return new Vec();
 };
+
 Vec.prototype.toString = function() {
     return `(${this.x}, ${this.y}, ${this.z})`;
 };
@@ -20,16 +21,16 @@ Vec.prototype.length = function () {
 }
 
 Vec.prototype.normalize = function () {
-    const l = this.length();
+    const l = this.length() || 1;
     this.x /= l;
     this.y /= l;
     this.z /= l;
 }
 
 Vec.prototype.toScreen = function () {
-    this.x /= this.w;
-    this.y /= this.w;
-    this.z /= this.w;
+    this.x /= this.z;
+    this.y /= this.z;
+    this.z /= this.z;
 }
 Vec.dotProd = function (vec1, vec2) {
     return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
@@ -58,9 +59,10 @@ Vec.sub = function (vec1, vec2) {
 }
 
 Vec.multCoeff = function (vec, coefficient) {
-    vec.x *= coefficient;
-    vec.y *= coefficient;
-    vec.z *= coefficient;
+    const x = vec.x * coefficient;
+    const y = vec.y * coefficient;
+    const z = vec.z * coefficient;
+    return new Vec(x, y, z);
 }
 
 Vec.cos = function (vec1, vec2) {
