@@ -9,7 +9,6 @@ import {
     matProject,
     matDiagonal,
     matTranslate,
-    matPointAt,
 } from "./MathStuff/Matrices.js";
 import {degToRad, multVecMat, multMatMat, matPointAtCreate, matInverse, matInit} from "./MathStuff/MathFunctions.js";
 import {toCameraDist, WIDTH, HEIGHT, c, aspectRatio, fovRad} from "./MathStuff/Constants.js"
@@ -33,23 +32,30 @@ const vLookDir = new Vec(0, 0, 1);
 
 const keyActions = {
     w: () => {
-        console.log("Action for 'w' key");
+        vCamera.z += 0.1;
     },
     a: () => {
-        console.log("Action for 'a' key");
+        vCamera.x += 0.1;
     },
     s: () => {
-        console.log("Action for 's' key");
+        vCamera.z -= 0.1;
+
     },
     d: () => {
-        console.log("Action for 'd' key");
+        vCamera.x -= 0.1;
     },
     ArrowUp: () => {
-        vCamera.y += 0.05;
+        vCamera.y += 0.1;
     },
     ArrowDown: () => {
-        vCamera.y -= 0.05;
+        vCamera.y -= 0.1;
 
+    },
+    ArrowLeft: () => {
+        console.log("Action for 'ArrowLeft' key");
+    },
+    ArrowRight: () => {
+        console.log("Action for 'ArrowRight' key");
     }
 };
 
@@ -62,14 +68,14 @@ document.addEventListener('keydown', (event) => {
 
 function animate() {
     clearCanvas();
-    //angle = (angle + degToRad(1)) % degToRad(360);
+    angle = (angle + degToRad(1)) % degToRad(360);
     const trisToRender = [];
     Object.keys(Scene).forEach(key => {
         const vTarget = Vec.sum(vCamera, vLookDir);
 
         let matWorld = matDiagonal();
-        matWorld = multMatMat(matRotateY(angle), matWorld);
-        matWorld = multMatMat(matWorld, matTranslate(0, 0, 20));
+        //matWorld = multMatMat(matRotateY(angle), matRotateZ(angle));
+        matWorld = multMatMat(matWorld, matTranslate(0, 0, 5));
 
         const matCamera = matPointAtCreate(vCamera, vTarget, vUp);
         const matView = matInverse(matCamera);
@@ -81,8 +87,6 @@ function animate() {
 
             for (let point of points) {
                 triTransformed[point] = multVecMat(tri[point], matWorld);
-                //triTransformed[point].w += 4;
-                triTransformed[point].toScreen();
             }
 
             for (let point of points) {
@@ -91,17 +95,22 @@ function animate() {
 
             const toCamVector = triViewed.p1;
             const normal = triViewed.normal();
-            const cos = Vec.cos(toCamVector, normal);
 
-            if (cos < 0.0) {
+            if (Vec.dotProd(normal, toCamVector) <= 0.0) {
+
                 const illumination = Vec.cos(vLightDirect, normal);
                 for (const point of points) {
 
                     triProjected[point] = multVecMat(triViewed[point], matProject);
+
+                    triProjected[point] = Vec.divCoeff(triProjected[point], triProjected[point].w);
+                    triProjected[point].x *= -1;
+                    triProjected[point].y *= -1;
+
                     triProjected[point] = Vec.sum(triProjected[point], vOffset);
 
-                    triProjected[point].x = Math.floor(triProjected[point].x * 0.5 * WIDTH);
-                    triProjected[point].y = Math.floor(triProjected[point].y * 0.5 * HEIGHT);
+                    triProjected[point].x = triProjected[point].x * 0.5 * WIDTH;
+                    triProjected[point].y = triProjected[point].y * 0.5 * HEIGHT;
                 }
                 trisToRender.push([Triangle.from(triProjected), illumination]);
             }
@@ -111,7 +120,7 @@ function animate() {
     trisToRender.sort((a, b) => {
         let res = 0;
         for (let p of points) {
-            res += b[0][p].z - a[0][p].z;
+            res += a[0][p].z - b[0][p].z;
         }
         return res;
     })

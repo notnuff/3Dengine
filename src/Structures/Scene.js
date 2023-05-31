@@ -10,12 +10,12 @@ function handleObj(event) {
     const trianglePull = [];
     const strType = {
         o: (str) => this.name = str.split(' ')[1],
-        v: (str) => verticesPull.push([str.split(' ')[1], str.split(' ')[2], str.split(' ')[3]]),
+        v: (str) => verticesPull.push([parseFloat(str.split(' ')[1]), parseFloat(str.split(' ')[2]), parseFloat(str.split(' ')[3])]),
         f: (str) => {
             const vertNum = [
-                str.split(' ')[1].split('//')[0] - 1,
-                str.split(' ')[2].split('//')[0] - 1,
-                str.split(' ')[3].split('//')[0] - 1
+                parseInt(str.split(' ')[1].split('//')[0]) - 1,
+                parseInt(str.split(' ')[2].split('//')[0]) - 1,
+                parseInt(str.split(' ')[3].split('//')[0]) - 1
             ];
             trianglePull.push([verticesPull[vertNum[0]], verticesPull[vertNum[1]], verticesPull[vertNum[2]]]);
         },

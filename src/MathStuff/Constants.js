@@ -19,7 +19,7 @@ const c = canvas.getContext('2d');
 
 const screenZNear = 0.1;
 const screenZFar = 1000;
-const fov = 100;
+const fov = 90;
 const fovRad = 1 / Math.tan(degToRad(fov * 0.5));
 let aspectRatio = HEIGHT / WIDTH;
 const screenZNorm = screenZFar / (screenZFar - screenZNear);

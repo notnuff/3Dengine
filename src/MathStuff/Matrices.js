@@ -35,12 +35,6 @@ const matTranslate = (x, y, z) => ([
     [x, y, z, 1],
 ]);
 
-const matPointAt = (forwardA, rightB, upC, positionT) => ([
-    [rightB.x, rightB.y, rightB.z, 0],
-    [upC.x, upC.y, upC.z, 0],
-    [forwardA.x, forwardA.y, forwardA.z, 0],
-    [positionT.x, positionT.y, positionT.z, 1]
-]);
 let matProject = [
     [aspectRatio * fovRad, 0, 0, 0],
     [0, fovRad, 0, 0],
@@ -56,4 +50,4 @@ window.addEventListener('resize',
             [0, 0, -screenZNear * screenZNorm, 0]
         ];
 })
-export { matRotateX, matRotateY, matRotateZ, matProject, matTranslate, matDiagonal, matPointAt };
+export { matRotateX, matRotateY, matRotateZ, matProject, matTranslate, matDiagonal };

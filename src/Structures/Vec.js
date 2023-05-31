@@ -36,7 +36,6 @@ Vec.dotProd = function (vec1, vec2) {
     return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
 }
 
-
 Vec.crossProd = function (vec1, vec2) {
     const x = vec1.y * vec2.z - vec1.z * vec2.y;
     const y = vec1.z * vec2.x - vec1.x * vec2.z;
@@ -62,6 +61,13 @@ Vec.multCoeff = function (vec, coefficient) {
     const x = vec.x * coefficient;
     const y = vec.y * coefficient;
     const z = vec.z * coefficient;
+    return new Vec(x, y, z);
+}
+
+Vec.divCoeff = function (vec, coefficient) {
+    const x = vec.x / coefficient;
+    const y = vec.y / coefficient;
+    const z = vec.z / coefficient;
     return new Vec(x, y, z);
 }
 

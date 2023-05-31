@@ -1,5 +1,4 @@
 import {Vec} from "../Structures/Vec.js";
-import {matPointAt} from "./Matrices.js";
 
 const degToRad = (theta) => {
     return theta * Math.PI / 180;
@@ -26,30 +25,32 @@ function multVecMat(vec, m) {
 
 function multMatMat(mat1, mat2) {
     const resMat = matInit();
-    for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < 4; j++) {
-            for (let k = 0; k < 4; k++)
-                resMat[i][j] += mat1[i][k] * mat2[k][j];
-        }
-    }
+    for (let c = 0; c < 4; c++)
+        for (let r = 0; r < 4; r++)
+            resMat[r][c] = mat1[r][0] * mat2[0][c] + mat1[r][1] * mat2[1][c] + mat1[r][2] * mat2[2][c] + mat1[r][3] * mat2[3][c];
     return resMat;
 }
 
 
-function matPointAtCreate(currPosition, targetPosition, up) {
+function matPointAtCreate(pos, target, up) {
+    let newForward = Vec.sub(target, pos);
+    newForward.normalize()
 
-    const newForward = Vec.sub(targetPosition, currPosition);
-    newForward.normalize();
+    let a = Vec.multCoeff(newForward, Vec.dotProd(up, newForward));
+    let newUp = Vec.sub(up, a);
+    newUp.normalize()
 
-    const a = Vec.multCoeff(newForward, Vec.dotProd(up, newForward));
-    const newUp = Vec.sub(up, a);
-    newUp.normalize();
+    // New Right direction is easy, its just cross product
+    let newRight = Vec.crossProd(newUp, newForward);
 
-    const newRight = Vec.crossProd(newUp, newForward);
-    //newRight.normalize();
-
-    return matPointAt(newForward, newRight, newUp, currPosition);
+    return [
+        [newRight.x, newRight.y, newRight.z, 0],
+        [newUp.x, newUp.y, newUp.z, 0],
+        [newForward.x, newForward.y, newForward.z, 0],
+        [pos.x, pos.y, pos.z, 1]
+    ]
 }
+
 
 function matInverse(m) {
     /*const result = matInit();
