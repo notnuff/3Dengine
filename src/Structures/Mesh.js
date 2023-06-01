@@ -1,10 +1,13 @@
 import { Triangle } from './Triangle.js';
 
-function Mesh(triangles) {
-    this.triangles = triangles.map(pointsArray => Triangle.from(pointsArray));
+class Mesh {
+    constructor(triangles) {
+        this.triangles = triangles.map((points) => Triangle.from(points));
+    }
+
+    push(triangle) {
+        this.triangles.push(Triangle.from(triangle));
+    }
 }
 
-Mesh.prototype.push = function(triangle) {
-    this.triangles.push(Triangle.from(triangle));
-};
 export { Mesh };

@@ -1,4 +1,4 @@
-import {aspectRatio, fovRad, screenZNorm, screenZNear, WIDTH, canvas, HEIGHT} from './Constants.js';
+import {aspectRatio, fovRad, screenZNorm, screenZNear, width, canvas, height} from './Constants.js';
 
 const matDiagonal = () => ([
     [1, 0, 0, 0],
