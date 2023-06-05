@@ -1,4 +1,4 @@
-import {aspectRatio, fovRad, screenZNorm, screenZNear, WIDTH, canvas, HEIGHT} from './Constants.js';
+import {aspectRatio, fovRad, screenZNorm, screenZNear, width, canvas, height} from './Constants.js';
 
 const matDiagonal = () => ([
     [1, 0, 0, 0],
@@ -34,11 +34,12 @@ const matTranslate = (x, y, z) => ([
     [0, 0, 1, 0],
     [x, y, z, 1],
 ]);
+
 let matProject = [
     [aspectRatio * fovRad, 0, 0, 0],
     [0, fovRad, 0, 0],
     [0, 0, screenZNorm, 1],
-    [0, 0, -screenZNear * screenZNorm, 0]
+    [0, 0, screenZNear * screenZNorm, 0]
 ];
 window.addEventListener('resize',
     function(){
