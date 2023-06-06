@@ -2,30 +2,9 @@
 
 //import { Mesh } from './Structures/Mesh.js';
 import { Triangle } from './Structures/Triangle.js';
-import {
-    matRotateX,
-    matRotateY,
-    matRotateZ,
-    matProject,
-    matDiagonal,
-    matTranslate,
-} from './MathStuff/Matrices.js';
-import {
-    degToRad,
-    multVecMat,
-    multMatMat,
-    matPointAtCreate,
-    matInverse,
-    matInit,
-} from './MathStuff/MathFunctions.js';
-import {
-    toCameraDist,
-    width,
-    height,
-    c,
-    aspectRatio,
-    fovRad
-} from './MathStuff/Constants.js';
+import { matrices } from './MathStuff/Matrices.js';
+import { degToRad, matOper} from './MathStuff/MathFunctions.js';
+import { constants } from './MathStuff/Constants.js';
 import {
     clearCanvas,
     drawTriangle,
@@ -89,12 +68,12 @@ function animate() {
     for (const key of Object.keys(Scene)) {
         const vTarget = Vec.sum(vCamera, vLookDir);
 
-        let matWorld = matDiagonal();
+        let matWorld = matrices.matDiagonal();
         // matWorld = multMatMat(matRotateY(angle), matRotateZ(angle));
-        matWorld = multMatMat(matWorld, matTranslate(0, 0, 5));
+        matWorld = matOper.multMatMat(matWorld, matrices.matTranslate(0, 0, 5));
 
-        const matCamera = matPointAtCreate(vCamera, vTarget, vUp);
-        const matView = matInverse(matCamera);
+        const matCamera = matOper.matPointAtCreate(vCamera, vTarget, vUp);
+        const matView = matOper.matInverse(matCamera);
 
         for (const tri of Scene[key].triangles) {
             const triProjected = new Triangle();
@@ -102,11 +81,11 @@ function animate() {
             const triViewed = new Triangle();
 
             for (const point of points) {
-                triTransformed[point] = multVecMat(tri[point], matWorld);
+                triTransformed[point] = matOper.multVecMat(tri[point], matWorld);
             }
 
             for (const point of points) {
-                triViewed[point] = multVecMat(triTransformed[point], matView);
+                triViewed[point] = matOper.multVecMat(triTransformed[point], matView);
             }
 
             const toCamVector = triViewed.p1;
@@ -115,7 +94,7 @@ function animate() {
             if (Vec.dotProd(normal, toCamVector) <= 0.0) {
                 const illumination = Vec.cos(vLightDirect, normal);
                 for (const point of points) {
-                    triProjected[point] = multVecMat(triViewed[point], matProject);
+                    triProjected[point] = matOper.multVecMat(triViewed[point], matrices.matProject);
 
                     triProjected[point].toScreen();
                     triProjected[point].x *= -1;
@@ -123,8 +102,8 @@ function animate() {
 
                     triProjected[point] = Vec.sum(triProjected[point], vOffset);
 
-                    triProjected[point].x = triProjected[point].x * 0.5 * width;
-                    triProjected[point].y = triProjected[point].y * 0.5 * height;
+                    triProjected[point].x = triProjected[point].x * 0.5 * constants.width;
+                    triProjected[point].y = triProjected[point].y * 0.5 * constants.height;
                 }
                 trisToRender.push([Triangle.from(triProjected), illumination]);
             }
@@ -133,10 +112,13 @@ function animate() {
 
     trisToRender.sort((a, b) => {
         let res = 0;
+        let maxA = -Infinity, maxB = -Infinity;
         for (const p of points) {
-            res += a[0][p].z - b[0][p].z;
+            maxA = Math.max(maxA, a[0][p].z);
+            maxB = Math.max(maxB, b[0][p].z);
+            res += b[0][p].z - a[0][p].z;
         }
-        return res;
+        return maxA - maxB + res;
     });
 
     for (const [tri, illum] of trisToRender) {

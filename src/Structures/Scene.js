@@ -15,7 +15,10 @@ function handleObj(event) {
             this.name = str.split(' ')[1];
         },
         v: (str) => {
-            const [x, y, z] = str.split(' ').slice(1).map(parseFloat);
+            const [x, y, z] = str
+                .split(' ')
+                .slice(1)
+                .map(parseFloat);
             verticesPull.push([x, y, z]);
         },
         f: (str) => {
@@ -29,9 +32,9 @@ function handleObj(event) {
         default: () => {},
     };
 
-    const obj = event.target.result.split('\n');
+    const objFile = event.target.result.split('\n');
 
-    for (const str of obj) {
+    for (const str of objFile) {
         const typeLetter = str[0];
         const action = strType[typeLetter] ?? strType.default;
         action(str);
