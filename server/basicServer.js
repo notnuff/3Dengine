@@ -1,35 +1,33 @@
 'use strict';
 const http = require('http');
 const fs = require('fs');
+const path = require('path');
+
 const server = http.createServer();
 
+const contentTypeMap = {
+  '': 'text/html',
+  css: 'text/css',
+  js: 'text/javascript',
+  ico: 'image/jpg',
+};
+
 server.on('request', (req, res) => {
-    console.log(req.method);
-    switch (req.url.split('.')[1]) {
-    case undefined: {
-        res.writeHead(200, { 'Content-type': 'text/html' });
-        res.end(fs.readFileSync('../index.html'));
+  console.log(req.method);
+  const extension = req.url.split('.')[1] || '';
+  const contentType = contentTypeMap[extension] || 'text/html';
+  const filePath = extension ? `..${req.url}` : '../index.html';
+
+  fs.readFile(path.join(__dirname, filePath), (err, data) => {
+    if (err) {
+      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.end('File not found');
+      return;
     }
-        break;
-    case 'css': {
-        res.writeHead(200, { 'Content-type': 'text/css' });
-        res.end(fs.readFileSync(`..${req.url}`));
-    }
-        break;
-    case 'js': {
-        res.writeHead(200, { 'Content-type': 'text/javascript' });
-        res.end(fs.readFileSync(`..${req.url}`));
-    }
-        break;
-    case 'ico': {
-        res.writeHead(200, { 'Content-type': 'image/jpg' });
-        res.end(fs.readFileSync('../resources/icon.jpg'));
-    }
-        break;
-    default: {
-        res.writeHead(200, { 'Content-type': 'text/html' });
-        res.end(fs.readFileSync('../index.html'));
-    }
-    }
+
+    res.writeHead(200, { 'Content-type': contentType });
+    res.end(data);
+  });
 });
-server.listen(3000, 'localhost', () => console.log('it`s working'));
+
+server.listen(3000, 'localhost', () => console.log('It\'s working'));
