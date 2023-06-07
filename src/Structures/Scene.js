@@ -36,7 +36,7 @@ function handleObj(event) {
 
     for (const str of objFile) {
         const typeLetter = str[0];
-        const action = strType[typeLetter] ?? strType.default;
+        const action = strType[typeLetter] || strType.default;
         action(str);
     }
 
