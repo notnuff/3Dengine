@@ -13,7 +13,7 @@ const contentTypeMap = {
 };
 
 server.on('request', (req, res) => {
-  console.log(req.method);
+  console.log(req.method, req.url);
   const extension = req.url.split('.')[1] || '';
   const contentType = contentTypeMap[extension] || 'text/html';
   const filePath = extension ? `..${req.url}` : '../index.html';
