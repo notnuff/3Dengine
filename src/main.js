@@ -3,7 +3,7 @@
 //import { Mesh } from './Structures/Mesh.js';
 import { Triangle } from './Structures/Triangle.js';
 import { matrices } from './MathStuff/Matrices.js';
-import { degToRad, matOper} from './MathStuff/MathFunctions.js';
+import { degToRad, MatrixOperations} from './MathStuff/MathFunctions.js';
 import { constants } from './MathStuff/Constants.js';
 import {
     clearCanvas,
@@ -69,11 +69,10 @@ function animate() {
         const vTarget = Vec.sum(vCamera, vLookDir);
 
         let matWorld = matrices.matDiagonal();
-        // matWorld = multMatMat(matRotateY(angle), matRotateZ(angle));
-        matWorld = matOper.multMatMat(matWorld, matrices.matTranslate(0, 0, 5));
+        matWorld = MatrixOperations.multMatMat(matWorld, matrices.matTranslate(0, 0, 5));
 
-        const matCamera = matOper.matPointAtCreate(vCamera, vTarget, vUp);
-        const matView = matOper.matInverse(matCamera);
+        const matCamera = MatrixOperations.matPointAtCreate(vCamera, vTarget, vUp);
+        const matView = MatrixOperations.matInverse(matCamera);
 
         for (const tri of Scene[key].triangles) {
             const triProjected = new Triangle();
@@ -81,11 +80,8 @@ function animate() {
             const triViewed = new Triangle();
 
             for (const point of points) {
-                triTransformed[point] = matOper.multVecMat(tri[point], matWorld);
-            }
-
-            for (const point of points) {
-                triViewed[point] = matOper.multVecMat(triTransformed[point], matView);
+                triTransformed[point] = MatrixOperations.multVecMat(tri[point], matWorld);
+                triViewed[point] = MatrixOperations.multVecMat(triTransformed[point], matView);
             }
 
             const toCamVector = triViewed.p1;
@@ -94,7 +90,7 @@ function animate() {
             if (Vec.dotProd(normal, toCamVector) <= 0.0) {
                 const illumination = Vec.cos(vLightDirect, normal);
                 for (const point of points) {
-                    triProjected[point] = matOper.multVecMat(triViewed[point], matrices.matProject);
+                    triProjected[point] = MatrixOperations.multVecMat(triViewed[point], matrices.matProject);
 
                     triProjected[point].toScreen();
                     triProjected[point].x *= -1;

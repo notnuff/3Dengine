@@ -57,5 +57,4 @@ class MatrixOperations {
     }
 }
 
-const matOper = MatrixOperations;
-export { matOper, degToRad };
+export { MatrixOperations, degToRad };

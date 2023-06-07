@@ -4,8 +4,6 @@ const Scene = {};
 
 const fileInput = document.getElementById('input');
 
-let fileCounter = 0;
-
 function handleObj(event) {
     const verticesPull = [];
     const trianglePull = [];
@@ -41,14 +39,11 @@ function handleObj(event) {
     }
 
     let objName;
-    // todo normal objects adding
     if (Scene[this.name]) {
-        objName = this.name + fileCounter;
+        objName = this.name + (Object.keys(Scene).length + 1);
     } else {
-        objName = this.name || `untitled.${fileCounter}`;
-        fileCounter++;
+        objName = this.name || `untitled.${Object.keys(Scene).length + 1}`;
     }
-
     Scene[objName] = new Mesh(trianglePull);
 }
 
