@@ -1,14 +1,16 @@
-import { c } from '../MathStuff/Constants.js';
+import { constants } from '../MathStuff/Constants.js';
 
 const points = ['p1', 'p2', 'p3'];
-
+const c = constants.context;
 function drawTriangle(triangle, color) {
     c.lineWidth = 1;
     c.strokeStyle = `rgb(${color}, ${color}, ${color})`;
     for (let i = 0; i < 3; i++) {
         c.beginPath();
-        c.moveTo(triangle[points[i]].x, triangle[points[i]].y);
-        c.lineTo(triangle[points[(i + 1) % 3]].x, triangle[points[(i + 1) % 3]].y);
+        const curr = points[i];
+        const next = points[(i + 1) % 3];
+        c.moveTo(triangle[curr].x, triangle[curr].y);
+        c.lineTo(triangle[next].x, triangle[next].y);
         c.stroke();
     }
 }

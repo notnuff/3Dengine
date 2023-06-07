@@ -4,8 +4,6 @@ const Scene = {};
 
 const fileInput = document.getElementById('input');
 
-let fileCounter = 0;
-
 function handleObj(event) {
     const verticesPull = [];
     const trianglePull = [];
@@ -15,7 +13,10 @@ function handleObj(event) {
             this.name = str.split(' ')[1];
         },
         v: (str) => {
-            const [x, y, z] = str.split(' ').slice(1).map(parseFloat);
+            const [x, y, z] = str
+                .split(' ')
+                .slice(1)
+                .map(parseFloat);
             verticesPull.push([x, y, z]);
         },
         f: (str) => {
@@ -29,23 +30,20 @@ function handleObj(event) {
         default: () => {},
     };
 
-    const obj = event.target.result.split('\n');
+    const objFile = event.target.result.split('\n');
 
-    for (const str of obj) {
+    for (const str of objFile) {
         const typeLetter = str[0];
-        const action = strType[typeLetter] ?? strType.default;
+        const action = strType[typeLetter] || strType.default;
         action(str);
     }
 
     let objName;
-    // todo normal objects adding
     if (Scene[this.name]) {
-        objName = this.name + fileCounter;
+        objName = this.name + (Object.keys(Scene).length + 1);
     } else {
-        objName = this.name || `untitled.${fileCounter}`;
-        fileCounter++;
+        objName = this.name || `untitled.${Object.keys(Scene).length + 1}`;
     }
-
     Scene[objName] = new Mesh(trianglePull);
 }
 
